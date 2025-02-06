@@ -3,60 +3,55 @@ import { autor } from "../models/Autor.js";
 class AutorController {
 
 
-  static async listarAutors(req, res) {
+  static async listarAutors(req, res, next) {
     try {
       const listaAutors = await autor.find({})
       res.status(200).json(listaAutors);
     } catch (erro) {
-
-      res.status(500).json({message: "Houve um erro ao retornar os Autors"});
+      next(erro)
     }
   }
 
-  static async cadastrarAutor(req, res) {
+  static async cadastrarAutor(req, res, next) {
     try {
 
       const novoAutor = await autor.create(req.body);
       res.status(201).json({message: "Autor cadastrado com sucesso", autor: novoAutor });
 
     } catch (erro) {
-
-      res.status(500).json({message: "Houve um erro ao cadastrar o autor"})
+      next(erro)
     }
 
   }
 
-  static async listarAutorPorId(req, res) {
+  static async listarAutorPorId(req, res, next) {
     try {
       const id = req.params.id;
       const AutorEncontrado = await autor.findById(id);
       res.status(200).json(AutorEncontrado);
     } catch (erro) {
-
-      res.status(500).json({message: "Houve um erro ao retornar o Autor"});
+      next(erro);
     }
   }
 
-  static async atualizarAutor(req, res) {
+  static async atualizarAutor(req, res, next) {
     try {
       const id = req.params.id;
       await autor.findByIdAndUpdate(id, req.body);
       res.status(200).json({message: "Autor atualizado"});
     } catch (erro) {
-
-      res.status(500).json({message: "Houve um erro ao atualizar os dados do Autor"});
+      next(erro);
     }
 
   }
 
-  static async apagarAutor(req, res) {
+  static async apagarAutor(req, res, next) {
     try {
       const id = req.params.id;
       await autor.findByIdAndDelete(id);
       res.status(200).json({message: "Autor apagado com sucesso"});
     } catch (erro) {
-
-      res.status(500).json({message: "Houve um erro ao apagar o Autor"});
+      next(erro);
     }
 
   }
